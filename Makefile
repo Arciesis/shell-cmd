@@ -10,16 +10,14 @@ HEADS := $(shell find ./include -type f -name *.h)
 OBJS := $(SRCS:src/%.c=build/%.o)
 INCLUDES := -I./include
 
-OBJ_DIR := $(./build/*)
-
 all: $(TARGET)
 
 $(TARGET): $(OBJS) $(HEADS)
-	gcc -l -o $@ $(OBJS)
+	gcc -o $@ $(OBJS)
 
-run: all
-	@./$(TARGET)
+#  run: all
+	#  @./$(TARGET)
 
 .PHONY: clean
 clean:
-	rm -rf $(OBJ_DIR) $(TARGET)
+	rm -rf $(TARGET)
