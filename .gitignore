@@ -1,3 +1,8 @@
+# My own excluded files/folder
+.ccls-cache
+shell-cmd
+
+
 # Prerequisites
 *.d
 
