@@ -64,7 +64,7 @@ $(DBGDIR)/%.o: %.c  # Compile source files from ./src
 prog: $(RELOUT)
 
 $(RELOUT): $(RELOBJS) # Include directory dependency
-	$(CC) $(CFLAGS) $(RELCFLAGS) $(INCLUDES) -o $(DBGOUT) $^
+	$(CC) $(CFLAGS) $(RELCFLAGS) $(INCLUDES) -o $(RELOUT) $^
 
 $(RELDIR)/%.o: %.c  # Compile source files from ./src
 	$(CC) -c $(CFLAGS) $(RELCFLAGS) $(INCLUDES) -o $@ $<

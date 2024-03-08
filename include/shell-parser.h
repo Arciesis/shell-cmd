@@ -2,8 +2,13 @@ typedef struct {
     char* command;
     char** arguments;
     int num_arguments;
-} Command;
+} Input;
 
+typedef enum {
+    long_args,
+    short_args,
+} Args_version;
 
-extern Command* parse_args(char** arg_str, int num_args);
-extern void free_args(Command* args);
+extern Input* parse_command(char** arg_str, int num_args);
+extern void free_command(Input* input);
+void parse_args(Input* command);

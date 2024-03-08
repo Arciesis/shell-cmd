@@ -1,13 +1,13 @@
 #include <stdlib.h>
 #include <string.h>
-
+#include <stdio.h>
 #include "../include/shell-parser.h"
 
 /**
  * Function that parse the command and the potential argument(s) of a call to a Struct
  */
-extern Command* parse_args(char** arg_str, int num_args) {
-    Command* args = malloc(sizeof(Command));
+extern Input* parse_command(char** arg_str, int num_args) {
+    Input* args = malloc(sizeof(Input));
     const int default_args_num = 4;
     int args_proccessed;
 
@@ -48,10 +48,26 @@ extern Command* parse_args(char** arg_str, int num_args) {
     return args;
 }
 
-extern void free_args(Command* args) {
-    for (int i = 0; i < args->num_arguments; i++) {
-        free(args->arguments[i]);
+extern void free_command(Input* input) {
+    for (int i = 0; i < input->num_arguments; i++) {
+        free(input->arguments[i]);
     }
-    free(args->arguments);
-    free(args->command);
+    free(input->arguments);
+    free(input->command);
 }
+
+//void parse_args(Input* command) {
+//    char** args = command->arguments;
+//    Args_version version;
+//    const char* long_token = "--";
+//    const char* short_token = "-";
+//
+//    for (int i = 0; i < command->num_arguments; i++) {
+//        char* delim = strtok(args[i], long_token);
+//
+//        if (0 == ) {
+//
+//        }
+//    }
+//
+//}
