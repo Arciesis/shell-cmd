@@ -1,27 +1,81 @@
-TARGET := shell-cmd
-
-#  SRC_DIR := src
-#  INCLUDE_DIR := include
-#  BIN_DIR := bin
-#  OBJ_DIR := obj
-
+#
+# General variables
+#
 CC := gcc
 
-SRCS := $(shell find ./src -type f -name *.c)
-HEADS := $(shell find ./include -type f -name *.h)
-OBJS := $(SRCS:src/%.c=build/%.o)
+# Source files (use find only if necessary, see note below)
+SRCS := $(shell find ./src -type f -name "*.c")  # Search for .c files in ./src
+
+# Object files (derived from source files)
+OBJS := $(SRCS:.c=.o)
+
+# Include directory
 INCLUDES := -I./include
 
-CFLAGS = -W -Wall
+# Output executable name
+OUTPUT := shell-cmd
 
-all: $(TARGET)
+# C compiler flags
+CFLAGS := -W -Wall -Werror -Wextra
 
-$(TARGET): $(OBJS) $(HEADS)
-	$(CC) $(CFLAGS) -o $@ $(OBJS) 
+#
+# Release build settings
+#
 
-#  run: all
-	#  @./$(TARGET)
+RELDIR := build
+RELOUT := $(RELDIR)/$(OUTPUT)
+RELOBJS := $(addprefix $(RELDIR)/,$(OBJS))  # Add build directory prefix to object files
+RELCFLAGS := -O0 -DNDEBUG
 
-.PHONY: clean
+#
+# Debug build settings
+#
+
+DBGDIR := debug
+DBGOUT := $(DBGDIR)/$(OUTPUT)
+DBGOBJS := $(addprefix $(DBGDIR)/,$(OBJS))  # Add debug directory prefix to object files
+DGGCFLAGS := -g -O0 -DDEBUG
+
+.PHONY: clean prep debug build remake
+
+# Build target (depends on prep and prog)
+build: prep prog
+
+# Debug target (depends on prep and prep_debug)
+debug: prep prep_debug
+
+# Default target to build both debug and release versions (can be customized)
+all: debug build
+
+#
+# Debug rules
+#
+prep_debug: $(DBGOUT)  # Ensure debug directory exists
+
+$(DBGOUT): $(DBGOBJS)
+	$(CC) $(CFLAGS) $(DBGCFLAGS) $(INCLUDES) -o $(DBGOUT) $^ 
+
+$(DBGDIR)/%.o: %.c  # Compile source files from ./src
+	$(CC) -c $(CFLAGS) $(DBGCFLAGS) $(INCLUDES) -o $@ $<
+
+#
+# Release rules
+#
+prog: $(RELOUT)
+
+$(RELOUT): $(RELOBJS) # Include directory dependency
+	$(CC) $(CFLAGS) $(RELCFLAGS) $(INCLUDES) -o $(DBGOUT) $^
+
+$(RELDIR)/%.o: %.c  # Compile source files from ./src
+	$(CC) -c $(CFLAGS) $(RELCFLAGS) $(INCLUDES) -o $@ $<
+
+#
+# Utilities
+#
+remake: clean all
+
+prep:
+	@mkdir -p $(DBGDIR) $(RELDIR) $(DBGDIR)/src $(RELDIR)/src # Create build directories
+
 clean:
-	rm -rf $(TARGET)
+	rm -rf $(RELOUT) $(RELOBJS) $(DBGOUT) $(DBGOBJS)
