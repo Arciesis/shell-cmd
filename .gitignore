@@ -1,7 +1,7 @@
 # My own excluded files/folder
 .ccls-cache
-shell-cmd
-
+build/
+debug/
 
 # Prerequisites
 *.d
