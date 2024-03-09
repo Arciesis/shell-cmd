@@ -26,7 +26,8 @@ int main(int argc, char** argv) {
 
     const char* ls_cmd = "ls";
     if (0 == strcmp(args->command, ls_cmd)) {
-        list_cwd();
+        CurrentDirectoryInfo* cwd_info = NULL;
+        list_cwd(cwd_info);
     }
 
     /* free(args); */
