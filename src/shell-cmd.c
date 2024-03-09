@@ -26,7 +26,14 @@ int main(int argc, char** argv) {
 
     const char* ls_cmd = "ls";
     if (0 == strcmp(args->command, ls_cmd)) {
-        list_cwd();
+        char* path = "";
+        if (args->arguments[0] == NULL) {
+            path = ".";
+        } else {
+            path = args->arguments[0];
+        }
+
+        list(path);
     }
 
     /* free(args); */

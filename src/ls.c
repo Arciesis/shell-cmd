@@ -7,34 +7,43 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-void list_cwd() {
-    char* cwd_path = NULL;
-    char* buf = NULL;
-    size_t buf_size = 256;
-    cwd_path = getcwd(buf, buf_size);
-    printf("cwd path => %s\n", cwd_path);
+static DirectoryInfo* get_dir_info(char* path);
 
-    if (cwd_path == NULL) {
-        perror("Current Working Directory was not retrieve!");
-        exit(EXIT_FAILURE);  // TODO: Make an error type for that error !
-    }
-
-    DIR* cwd = opendir(cwd_path);
-    if (cwd == NULL) {
+static DirectoryInfo* get_dir_info(char* path) {
+    DIR* current_dir = opendir(path);
+    if (current_dir == NULL) {
         perror("Cannot open current Directory!");
-        exit(EXIT_FAILURE); // TODO: Make an error type for that error !
+        exit(EXT_FAILURE_CANT_OPEN_CURRENT_DIR);
     }
 
-    const struct dirent* entry;
-    while ((entry = readdir(cwd)) != NULL) {
-        printf("%u => %s\n", entry->d_type, entry->d_name);
+    struct dirent* entry = NULL;
+    entry = readdir(current_dir);
+
+    DirectoryInfo* dir_info = malloc(sizeof(DirectoryInfo));
+    if (dir_info == NULL) {
+        perror("Can't allocate memory for the directory");
+        exit(EXT_FAILURE_CANT_ALLOCATE_MEMORY);
     }
 
-    closedir(cwd);
-    free(cwd_path);
+    dir_info->dir = current_dir;
+    dir_info->dirrent = entry;
+
+    return dir_info;
 }
 
-void free_list(DIR* cwd, struct dirent* current_dirent) {
-    free(cwd);
-    free(current_dirent);
+void free_dir_info(DirectoryInfo* dir_info) {
+    closedir(dir_info->dir);
+    free(dir_info->dirrent);
+    free(dir_info);
 }
+
+void list(char* path) { 
+    DirectoryInfo* dir_info = get_dir_info(path);
+
+    while ((dir_info->dirrent = readdir(dir_info->dir)) != NULL) {
+        printf("%s\n", dir_info->dirrent->d_name);
+    }
+
+    free_dir_info(dir_info);
+}
+
