@@ -25,7 +25,7 @@ CFLAGS := -W -Wall -Werror -Wextra
 RELDIR := build
 RELOUT := $(RELDIR)/$(OUTPUT)
 RELOBJS := $(addprefix $(RELDIR)/,$(OBJS))  # Add build directory prefix to object files
-RELCFLAGS := -O0 -DNDEBUG
+RELCFLAGS := -O0
 
 #
 # Debug build settings
@@ -34,7 +34,7 @@ RELCFLAGS := -O0 -DNDEBUG
 DBGDIR := debug
 DBGOUT := $(DBGDIR)/$(OUTPUT)
 DBGOBJS := $(addprefix $(DBGDIR)/,$(OBJS))  # Add debug directory prefix to object files
-DGGCFLAGS := -g -O0 -DDEBUG
+DBGCFLAGS := -g2 -O0 -ggdb2 -DDEBUG
 
 .PHONY: clean prep debug build remake
 

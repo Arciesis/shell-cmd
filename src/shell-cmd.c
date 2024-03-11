@@ -1,6 +1,5 @@
 #include "../include/shell-cmd.h"
 
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,7 +32,19 @@ int main(int argc, char** argv) {
             path = args->arguments[0];
         }
 
-        list(path);
+        if (NULL == args->arguments[1]) {
+            list(path);
+        } else if (0 == strcmp(args->arguments[1], "-l")) {
+            if (NULL == args->arguments[2]) {
+                list_long(path);
+            } else {
+                list_long(args->arguments[2]);
+            }
+        } else {
+            perror("An unknown argument has been passed");
+            exit(EXT_FAILURE_UNKNOWN_ARGUMENT);
+        }
+
     }
 
     /* free(args); */

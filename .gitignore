@@ -1,7 +1,8 @@
 # My own excluded files/folder
-.ccls-cache
+.cache/
 build/
 debug/
+compile_commands.json
 
 # Prerequisites
 *.d
