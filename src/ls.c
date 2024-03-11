@@ -36,7 +36,7 @@ static DirectoryInfo* get_dir_info(char* path) {
 static FileInfo* get_file_info(char* path) {
     FileInfo* file_info = (FileInfo*)malloc(sizeof(FileInfo));
 
-    char* file_basename = basename(path);
+    const char* file_basename = basename(path);
 
     char* perms = (char*)malloc(sizeof(char) * 11);
     file_info->permissions = (char*)malloc(sizeof(char) * 11);
@@ -125,7 +125,7 @@ static FileInfo* get_file_info(char* path) {
 
     file_info->permissions = strcpy(file_info->permissions, perms);
 
-    free(file_basename);
+    /* free(file_basename); */
     free(perms);
     return file_info;
 }
@@ -138,7 +138,7 @@ void free_dir_info(DirectoryInfo* dir_info) {
 
 void free_file_info(FileInfo* file_info) {
     free(file_info->name);
-    free(file_info->type);
+    /* free(file_info->type); */
     free(file_info->permissions);
     free(file_info);
 }
